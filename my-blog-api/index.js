@@ -12,10 +12,18 @@ const app = express()
 app.use(morgan("dev"))
 app.use(express.json())
 
-const options = {
+const swaggerOptions = {
     customCss: '.swagger-ui .topbar { display: none }'
   };
-app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc, options))
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc, swaggerOptions))
+
+app.use((req, _res, next) => {
+    req.user = {
+        id: 999,
+        name: "Majedur Rahman"
+    }
+    next()
+})
 
 app.get("/health", (_req, res) => {
     res.status(200).json({
@@ -39,7 +47,7 @@ app.post("/api/v1/auth/signin", (req, res) => {
 
 app.get("/api/v1/articles", async (req, res) => {
     // 1. extract query params
-    const page = +req.query.page
+    const page = +req.query.page || 1
     const limit = +req.query.limit || 10
     const sortType = req.query.sort_type || "asc"
     const sortBy = req.query.sort_by || "updatedAt"
@@ -77,11 +85,31 @@ app.get("/api/v1/articles", async (req, res) => {
     }
     res.status(200).json(response)
 })
-app.post("/api/v1/articles", (req, res) => {
-    res.status(200).json({
-        path: "/articles",
-        method: "POST"
+app.post("/api/v1/articles", async (req, res) => {
+    // destructure the request body
+    const { title, body, cover, status } = req.body
+
+    // invoke the service function
+    const article = await articleService.createArticle({
+        title,
+        body,
+        authorId: req.user.id,
+        cover,
+        status
     })
+
+    // generate response
+    const response = {
+        code: 201,
+        message: "Article created successfully",
+        data: article,
+        links: {
+            self: `${req.url}/${article.id}`,
+            author: `${req.url}/${article.id}/author`,
+            comments: `${req.url}/${article.id}/comments`
+        }
+    }
+    res.status(201).json(response)
 })
 app.get("/api/v1/articles/:id", (req, res) => {
     res.status(200).json({

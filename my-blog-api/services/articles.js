@@ -18,6 +18,7 @@ const findArticles = async ({
         articles = await articleInstance.find()
     }
     // sorting
+    articles = [...articles]
     articles = await articleInstance.sort(articles, sortType, sortBy)
 
     // pagination
@@ -46,9 +47,19 @@ const transformdArt = (articles) => {
     })
 }
 
+const createArticle = async ({title, body, authorId, cover= "", status="draft"}) => {
+    const articleInstance = new Article(databaseConnection.db.articles)
+    const article = await articleInstance.create(
+        { title, body, authorId, cover, status },
+        databaseConnection
+    )
+    return article
+}
+
 
 
 module.exports = {
     findArticles,
-    transformdArt
+    transformdArt,
+    createArticle
 }
