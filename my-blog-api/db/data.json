@@ -1,0 +1,49 @@
+{
+    "users":[
+
+    ],
+    "articles":[
+        {
+            "id": 1,
+            "title": "this a first article",
+            "body": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content.",
+            "cover": "https://s3.aws.com/myblog/234.jpg",
+            "author": {
+                "id": 1,
+                "name": "Majedur Rahman"
+            },
+            "link": "articles/1",
+            "createdAt": "2023-07-17T10:34:23.964Z",
+            "updatedAt": "2023-07-17T10:34:23.964Z"
+        },
+        {
+            "id": 2,
+            "title": "this a second article",
+            "body": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content.",
+            "cover": "https://s3.aws.com/myblog/234.jpg",
+            "author": {
+                "id": 2,
+                "name": "Liton Ali"
+            },
+            "link": "articles/1",
+            "createdAt": "2023-07-17T13:02:17.779Z",
+            "updatedAt": "2023-07-17T13:02:17.779Z"
+        },
+        {
+            "id": 3,
+            "title": "this a third article",
+            "body": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content.",
+            "cover": "https://s3.aws.com/myblog/234.jpg",
+            "author": {
+                "id": 1,
+                "name": "Majedur Rahman"
+            },
+            "link": "articles/1",
+            "createdAt": "2023-07-18T12:47:30.716Z",
+            "updatedAt": "2023-07-18T12:47:30.716Z"
+        }
+    ],
+    "comments":[
+
+    ]
+}
