@@ -1,30 +1,17 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const morgan = require('morgan');
-const swaggerUI = require('swagger-ui-express');
-const YAML = require('yamljs');
-const swaggerDoc = YAML.load('./swagger.yaml');
+
+const applyMiddleware = require('./middleware');
 
 const app = express();
-app.use(morgan('dev'));
-app.use(express.json());
-const swaggerOptions = {
-	customCss: '.swagger-ui .topbar { display: none }',
-};
-app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc, swaggerOptions));
 
-app.use((req, _res, next) => {
-	req.user = {
-		id: 999,
-		name: 'Majedur Rahman',
-	};
-	next();
-});
+applyMiddleware(app, express);
 
-app.get('/health', (_req, res) => {
+app.get('/health', (req, res) => {
 	res.status(200).json({
 		health: 'OK',
+		user: req.user,
 	});
 });
 
