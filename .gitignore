@@ -1,5 +1,6 @@
 /my-blog-api/node_modules
 /my-blog-api/package-lock.json
+/my-blog-api/.env
 
 /demo/node_modules
 /demo/package-lock.json
