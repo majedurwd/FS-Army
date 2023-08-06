@@ -8,6 +8,7 @@ const findAll = async ({
 	sortType = 'dsc',
 	sortBy = 'updatedAt',
 	search = '',
+	path,
 }) => {
 	const sortStr = `${sortType === 'dsc' ? '-' : ''}${sortBy}`;
 	const skipNum = page * limit - limit;
@@ -19,6 +20,8 @@ const findAll = async ({
 		.sort(sortStr)
 		.skip(skipNum)
 		.limit(limit);
+
+	// Create DTO
 	const data = articles.map((article) => new ArticleDTO(article));
 
 	// Generate pagination object
@@ -29,7 +32,24 @@ const findAll = async ({
 		totalItems,
 	});
 
-	return { data, pagination };
+	// Generate query object
+	const query = {
+		page,
+		limit,
+		sort_type: sortType,
+		sort_by: sortBy,
+		search,
+	};
+
+	// Generate HATEOAS Links
+	const links = hateoasGenerator(
+		query,
+		path,
+		pagination.prevPage,
+		pagination.nextPage
+	);
+
+	return { data, pagination, links };
 };
 
 const countDoc = (filter) => {
