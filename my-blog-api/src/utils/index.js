@@ -1,9 +1,7 @@
-const paginationService = require('./pagination');
-const hateoasGenerator = require('./hateoasGenerator');
-const generateQueryString = require('./generateQueryString');
+const qs = require('./qs');
+const query = require('./query');
 
 module.exports = {
-	paginationService,
-	hateoasGenerator,
-	generateQueryString,
+	qs,
+	query,
 };

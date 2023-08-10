@@ -1,14 +1,12 @@
 const { Article } = require('../../model');
-const ArticleDTO = require('./dto');
-const { paginationService, hateoasGenerator } = require('../../utils');
+const defaults = require('../../config/defaults');
 
-const findAll = async ({
-	page = 1,
-	limit = 10,
-	sortType = 'dsc',
-	sortBy = 'updatedAt',
-	search = '',
-	path,
+const findAllItems = async ({
+	page = defaults.page,
+	limit = defaults.limit,
+	sortType = defaults.sortType,
+	sortBy = defaults.sortBy,
+	search = defaults.search,
 }) => {
 	const sortStr = `${sortType === 'dsc' ? '-' : ''}${sortBy}`;
 	const skipNum = page * limit - limit;
@@ -20,43 +18,23 @@ const findAll = async ({
 		.sort(sortStr)
 		.skip(skipNum)
 		.limit(limit);
-
-	// Create DTO
-	const data = articles.map((article) => new ArticleDTO(article));
-
-	// Generate pagination object
-	const totalItems = await countDoc(filter);
-	const pagination = paginationService({
-		page,
-		limit,
-		totalItems,
-	});
-
-	// Generate query object
-	const query = {
-		page,
-		limit,
-		sort_type: sortType,
-		sort_by: sortBy,
-		search,
-	};
-
-	// Generate HATEOAS Links
-	const links = hateoasGenerator(
-		query,
-		path,
-		pagination.prevPage,
-		pagination.nextPage
-	);
-
-	return { data, pagination, links };
+	return articles.map((article) => ({ ...article._doc, id: article.id }));
 };
 
-const countDoc = (filter) => {
+const countItem = ({ search = defaults.search }) => {
+	const filter = {
+		title: { $regex: search, $options: 'i' },
+	};
 	return Article.count(filter);
 };
 
-const create = ({ title, body = '', cover = '', status = 'draft', user }) => {
+const create = async ({
+	title,
+	body = '',
+	cover = '',
+	status = 'draft',
+	user,
+}) => {
 	if (!title || !user) {
 		const error = new Error('Invalid parameters');
 		error.status = 400;
@@ -70,10 +48,37 @@ const create = ({ title, body = '', cover = '', status = 'draft', user }) => {
 		status,
 		author: user.id,
 	});
-	return article.save();
+	await article.save();
+	return {
+		...article._doc,
+		id: article.id,
+	};
+};
+
+const findSingleItem = async ({ id, expand = '' }) => {
+	if (!id) throw new Error('Id is required');
+	expand = expand.split(',').map((item) => item.trim());
+	const article = await Article.findById(id);
+	if (expand.includes('author')) {
+		await article.populate({
+			path: 'author',
+			select: 'name',
+		});
+	}
+	if (expand.includes('comment')) {
+		await article.populate({
+			path: 'comments',
+		});
+	}
+	return {
+		...article._doc,
+		id: article.id,
+	};
 };
 
 module.exports = {
-	findAll,
+	findAllItems,
+	findSingleItem,
+	countItem,
 	create,
 };

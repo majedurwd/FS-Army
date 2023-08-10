@@ -734,6 +734,5 @@ components:
       description: "Article Id"
       required: true
       schema:
-        type: "integer"
-        format: "int32"
-        example: 1
+        type: "string"
+        example: "64d39d8899514f43849809ef"

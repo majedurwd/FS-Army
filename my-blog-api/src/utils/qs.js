@@ -8,4 +8,4 @@ const generateQueryString = (query) => {
 		.join('&');
 };
 
-module.exports = generateQueryString;
+module.exports = { generateQueryString };
