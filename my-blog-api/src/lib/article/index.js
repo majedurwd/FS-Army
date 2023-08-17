@@ -1,6 +1,7 @@
 const { Article } = require('../../model');
 const defaults = require('../../config/defaults');
 const { notFound } = require('../../utils/error');
+const { updateArticleV2 } = require('./updateArticleV2');
 
 /**
  * Find All Items
@@ -148,6 +149,10 @@ const removeItem = async (id) => {
 	if (!article) {
 		throw notFound();
 	}
+
+	// TODO:
+	// Asynchronously Delete all associated comments
+
 	return Article.findByIdAndDelete(id);
 };
 
@@ -159,4 +164,5 @@ module.exports = {
 	updateOrCreate,
 	updatePropertices,
 	removeItem,
+	updateArticleV2,
 };

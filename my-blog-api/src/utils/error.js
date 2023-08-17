@@ -4,6 +4,13 @@ const notFound = (message = 'Resource not found') => {
 	return error;
 };
 
+const badRequest = (message = 'Bad Request') => {
+	const error = new Error(message);
+	error.status = 403;
+	return error;
+};
+
 module.exports = {
 	notFound,
+	badRequest,
 };

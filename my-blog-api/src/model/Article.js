@@ -18,7 +18,7 @@ const articleSchema = new Schema(
 			default: 'draft',
 		},
 	},
-	{ timestamps: true }
+	{ timestamps: true, strict: false }
 );
 
 const Article = model("Article", articleSchema)
