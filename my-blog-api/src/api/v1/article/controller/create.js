@@ -11,11 +11,11 @@ const create = async (req, res, next) => {
 			status,
 			user: req.user,
 		});
-
+		console.log('Article:', article);
 		const response = {
 			code: 201,
 			message: 'Article created successfully',
-			data: { ...article._doc },
+			data: { ...article },
 			links: {
 				self: `/articles/${article.id}`,
 				author: `/articles/${article.id}/author`,

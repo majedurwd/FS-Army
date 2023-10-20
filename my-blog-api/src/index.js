@@ -5,13 +5,13 @@ const { connectDB } = require('./db');
 
 const server = http.createServer(app);
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 8000;
 
 const main = async () => {
 	try {
 		await connectDB();
 		server.listen(PORT, async () => {
-			console.log('Server is listening on port 4000');
+			console.log('Server is listening on port 8000');
 		});
 	} catch (e) {
 		console.log('Database Error');
